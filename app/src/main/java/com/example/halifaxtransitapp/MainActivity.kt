@@ -12,6 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.halifaxtransitapp.ui.theme.HalifaxTransitAppTheme
+import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.maps.extension.compose.animation.viewport.MapViewportState
+import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,15 +24,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HalifaxTransitAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                }
+              DisplayMap()
             }
         }
     }
 }
 
 @Composable
-fun DisplayUI(){
-
+fun DisplayMap(){
+    MapboxMap(
+        Modifier.fillMaxSize(),
+        mapViewportState = rememberMapViewportState {
+            setCameraOptions {
+                zoom(14.0)
+                center(Point.fromLngLat(-63.6027, 44.6544))
+                pitch(0.0)
+                bearing(0.0)
+            }
+        },
+    )
 }
