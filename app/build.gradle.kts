@@ -56,4 +56,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Mapbox
+    implementation("com.mapbox.maps:android:11.12.2")
+    implementation("com.mapbox.extension:maps-compose:11.12.2")
 }
