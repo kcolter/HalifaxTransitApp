@@ -60,4 +60,13 @@ dependencies {
     // Mapbox
     implementation("com.mapbox.maps:android:11.12.2")
     implementation("com.mapbox.extension:maps-compose:11.12.2")
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.9.0")
+
+    // Google Play location service
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    // Accompanist permissions - makes getting permissions easier
+    implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
 }
