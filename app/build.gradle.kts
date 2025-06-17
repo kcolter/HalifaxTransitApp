@@ -70,4 +70,7 @@ dependencies {
 
     // Accompanist permissions - makes getting permissions easier
     implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    // GTFS transit feed - https://gtfs.org/realtime/language-bindings/java/
+    implementation(group = "org.mobilitydata", name= "gtfs-realtime-bindings", version= "0.0.8")
 }
