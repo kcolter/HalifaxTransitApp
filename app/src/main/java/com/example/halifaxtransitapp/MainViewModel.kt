@@ -11,9 +11,4 @@ class MainViewModel : ViewModel() {
     val mapViewportState = MapViewportState()
 
 
-    fun updateLocation(longAndLatIn: String){
-        _longAndLat = longAndLatIn
-    }
-
-
 }

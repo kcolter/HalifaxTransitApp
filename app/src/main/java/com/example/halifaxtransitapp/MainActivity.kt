@@ -41,30 +41,49 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.mapbox.android.core.permissions.PermissionsListener
+import com.mapbox.android.core.permissions.PermissionsManager
 
 class MainActivity : ComponentActivity() {
 
     //define view model
     private lateinit var mainViewModel: MainViewModel
 
+    //PermissionsManager for mapbox, researched from https://docs.mapbox.com/android/maps/guides/user-location/permissions/
+    lateinit var permissionsManager: PermissionsManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
+
+        //check if permissions granted via mapbox PermissionsManager
+        if(PermissionsManager.areLocationPermissionsGranted(this)){
+
+            Log.v("INFO", "Permissions granted")
+
+            //permissions are granted
+            super.onCreate(savedInstanceState)
+            enableEdgeToEdge()
+            setContent {
 
 
-            //init view model
-            mainViewModel = viewModel()
+                //init view model
+                mainViewModel = viewModel()
 
-            //display the ui
-            HalifaxTransitAppTheme {
-              DisplayUI(mainViewModel)
+                //display the ui
+                HalifaxTransitAppTheme {
+                    DisplayUI(mainViewModel)
+                }
             }
+
+        } else {
+            Log.v("INFO", "Permissions NOT granted")
+            permissionsManager = PermissionsManager(permissionsListener)
+            permissionsManager.requestLocationPermissions(this)
         }
     }
 }
 
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayUI(mainViewModel: MainViewModel){
@@ -146,51 +165,21 @@ fun DisplayUI(mainViewModel: MainViewModel){
     }
 }
 
-@UnstableApi
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun GetLocation(
-    //inject view model here so we can pass the coordinates to it
-    viewModel: MainViewModel = viewModel()
-) {
-    // Remember the permission state(asking for Fine location)
-    val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
-    if (permissionState.status.isGranted) {
+//researched from https://docs.mapbox.com/android/maps/guides/user-location/permissions/
+var permissionsListener: PermissionsListener = object : PermissionsListener {
+    override fun onExplanationNeeded(permissionsToExplain: List<String>) {
 
-        // Get Location
-        val currentContext = LocalContext.current
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(currentContext)
-
-        if (ContextCompat.checkSelfPermission(
-                currentContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED)
-        {
-            val cancellationTokenSource = CancellationTokenSource()
-
-            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.token)
-                .addOnSuccessListener { location ->
-                    if (location != null) {
-                        val lat = location.latitude.toString()
-                        val lng = location.longitude.toString()
-
-                        val coordinates = "$lat,$lng"
-
-                        // call a function, like in View Model, to do something with location...
-                        //pass coordinates into the viewModel
-                        viewModel.updateLocation(coordinates)
-                    }
-                    else {
-                        Log.i("TESTING", "Problem encountered: Location returned null")
-                    }
-                }
-        }
     }
-    else {
-        // Run a side-effect (coroutine) to get permission. The permission popup.
-        LaunchedEffect(permissionState){
-            permissionState.launchPermissionRequest()
+
+    override fun onPermissionResult(granted: Boolean) {
+        if (granted) {
+            // Permission sensitive logic called here, such as activating the Maps SDK's LocationComponent to show the device's location
+
+        } else {
+
+            // User denied the permission
+
         }
     }
 }
