@@ -1,9 +1,12 @@
 package com.example.halifaxtransitapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.halifaxtransitapp.MainViewModel
@@ -16,12 +19,19 @@ import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportS
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
+import kotlin.math.log
 
 
 lateinit var permissionsManager: PermissionsManager
 
+private lateinit var mainViewModel: MainViewModel
+
 @Composable
 fun MapUI(mainViewModel: MainViewModel){
+
+    val gtfsFeed by mainViewModel.gtfs.collectAsState()
+    val entities = gtfsFeed?.entityList
+
     val mapViewportState = mainViewModel.mapViewportState
 
     MapboxMap(
