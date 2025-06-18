@@ -65,12 +65,6 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.9.0")
 
-    // Google Play location service
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
-
-    // Accompanist permissions - makes getting permissions easier
-    implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
-
     // GTFS transit feed - https://gtfs.org/realtime/language-bindings/java/
     implementation(group = "org.mobilitydata", name= "gtfs-realtime-bindings", version= "0.0.8")
 }
