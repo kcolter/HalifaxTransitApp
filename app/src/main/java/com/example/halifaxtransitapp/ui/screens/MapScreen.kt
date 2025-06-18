@@ -1,6 +1,7 @@
 package com.example.halifaxtransitapp.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,18 +10,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import com.example.halifaxtransitapp.MainViewModel
+import com.example.halifaxtransitapp.R
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
-import kotlin.math.log
-
+import com.mapbox.maps.extension.compose.annotation.ViewAnnotation
+import com.mapbox.maps.viewannotation.geometry
+import com.mapbox.maps.viewannotation.viewAnnotationOptions
 
 lateinit var permissionsManager: PermissionsManager
 
@@ -62,6 +68,43 @@ fun MapUI(mainViewModel: MainViewModel){
                 mapViewportState.transitionToFollowPuckState()
             }
         }
+
+        Log.v("INFO", "before entities forEach in map")
+        //regardless of location-permissions, plot buses on map using ViewAnnotation
+        entities?.forEach{ entity ->
+            val lon = entity.vehicle.position.longitude
+            val lat = entity.vehicle.position.latitude
+            val route = entity.vehicle.trip.routeId
+
+            Log.v("INFO","$lat, $lon, $route")
+
+            ViewAnnotation(
+                options = viewAnnotationOptions{
+                    //place at appropriate location
+                    geometry(Point.fromLngLat(lon.toDouble(), lat.toDouble()))
+                }
+            ) {
+                //insert Bus with given route
+                Bus(route)
+                Log.v("INFO", "Created bus at $lon, $lat")
+            }
+
+        }
     }
+}
+
+
+//view annotation component for our buses
+@Composable
+fun Bus(routeId: String){
+
+    Image(
+        painter = painterResource(id = R.drawable.bus_icon),
+        contentDescription = "Bus with route ID $routeId"
+        )
+    Text(
+        text = routeId,
+        textAlign = TextAlign.Center
+    )
 }
 

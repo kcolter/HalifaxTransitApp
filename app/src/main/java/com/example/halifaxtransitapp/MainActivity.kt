@@ -64,9 +64,11 @@ class MainActivity : ComponentActivity() {
             enableEdgeToEdge()
             setContent {
 
-
                 //init view model
                 mainViewModel = viewModel()
+
+                //load bus positions
+                mainViewModel.loadBusPositions()
 
                 //display the ui
                 HalifaxTransitAppTheme {

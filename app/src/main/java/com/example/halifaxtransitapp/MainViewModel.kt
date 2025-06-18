@@ -24,6 +24,9 @@ class MainViewModel : ViewModel() {
 
     // Get the real-time bus positions from Halifax Transit.
     fun loadBusPositions() {
+
+        Log.v("INFO", "in loadBusPositions")
+
         viewModelScope.launch {
             try {
                 val url = URL("https://gtfs.halifax.ca/realtime/Vehicle/VehiclePositions.pb")
