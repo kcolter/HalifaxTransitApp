@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,12 +29,13 @@ fun AlertsUI(mainViewModel: MainViewModel) {
     val gtfsFeed by mainViewModel.gtfs_alerts.collectAsState()
     val alerts = gtfsFeed?.entityList
 
-    Log.v("INFO", alerts.toString())
-
     Spacer(modifier = Modifier.height(30.dp))
 
     if (alerts != null) {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             items(alerts) { a ->
                 Alert(a.alert)
             }
@@ -50,11 +52,11 @@ fun Alert(entity: GtfsRealtime.Alert) {
         modifier = Modifier
             .border(3.dp, MaterialTheme.colorScheme.secondary, RectangleShape)
             .padding(all = 10.dp)
+            .fillMaxSize()
     ){
-
-
         Text (
-            text = "Affected Route: " + entity.informedEntityList.first().routeId //note: format is such that the entityList will be each stop along the route, but for our purposes just concerned with the route_id for now
+            text = "Affected Route: " + entity.informedEntityList.first().routeId, //note: format is such that the entityList will be each stop along the route, but for our purposes just concerned with the route_id for now
+            style = MaterialTheme.typography.titleLarge
         )
         Text(
             text = "Cause: " + entity.cause

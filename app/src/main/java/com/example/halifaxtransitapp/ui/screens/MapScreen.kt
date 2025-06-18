@@ -97,7 +97,6 @@ fun MapUI(mainViewModel: MainViewModel) {
 //view annotation component for our buses
 @Composable
 fun Bus(routeId: String) {
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -108,13 +107,13 @@ fun Bus(routeId: String) {
             painter = painterResource(id = R.drawable.bus_icon),
             contentDescription = "Bus with route ID $routeId",
             modifier = Modifier
-                .size(120.dp)
+                .size(100.dp)
         )
         Text(
             text = routeId,
             textAlign = TextAlign.Center,
             fontSize = 30.sp,
-            color = Color.Red,
+            color = Color.Yellow,
             style = TextStyle(fontWeight = FontWeight.Bold)
         )
     }

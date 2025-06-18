@@ -125,7 +125,7 @@ fun DisplayUI(mainViewModel: MainViewModel){
                         navController.navigate("map")
                     },
                     icon = { Icon(
-                        painter = painterResource(R.drawable.ic_placeholder),
+                        painter = painterResource(R.drawable.bus_icon),
                         contentDescription = "Map of transit area"
                     )
                     },
@@ -138,8 +138,8 @@ fun DisplayUI(mainViewModel: MainViewModel){
                         navController.navigate("alerts")
                     },
                     icon = { Icon(
-                        painter = painterResource(R.drawable.ic_placeholder),
-                        contentDescription = "weather alerts"
+                        painter = painterResource(R.drawable.ic_alerts),
+                        contentDescription = "Service alerts"
                     )
                     },
                 )
@@ -153,15 +153,10 @@ fun DisplayUI(mainViewModel: MainViewModel){
             modifier = Modifier.padding(innerPadding)
         ){
             composable(route = "map"){
-                if (true /*check if data != null*/) {
                     MapUI(mainViewModel)
-                }
             }
-
             composable(route = "alerts"){
-                if (true /*check if data != null*/) {
                     AlertsUI(mainViewModel)
-                }
             }
         }
     }
