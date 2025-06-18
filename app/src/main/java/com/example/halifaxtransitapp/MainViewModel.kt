@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 //for SSL trust-all
 import java.security.SecureRandom
@@ -23,6 +26,9 @@ class MainViewModel : ViewModel() {
 
     // Store the map viewport state in the ViewModel so does not reset when screen is reloaded
     val mapViewportState = MapViewportState()
+
+    //var to see if map has centered on user before, to avoid re-focusing on puck on following screen changes
+    var hasCenteredBefore by mutableStateOf(false)
 
     private val _gtfs_bus = MutableStateFlow<GtfsRealtime.FeedMessage?>(null)
     val gtfs_bus = _gtfs_bus.asStateFlow()

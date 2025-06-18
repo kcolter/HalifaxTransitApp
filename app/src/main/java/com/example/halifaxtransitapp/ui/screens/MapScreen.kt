@@ -45,7 +45,7 @@ fun MapUI(mainViewModel: MainViewModel) {
 
     MapboxMap(
         Modifier.fillMaxSize(),
-        mapViewportState = mapViewportState
+        mapViewportState = mainViewModel.mapViewportState
     )
     {
 
@@ -68,11 +68,13 @@ fun MapUI(mainViewModel: MainViewModel) {
                     puckBearing = PuckBearing.COURSE
                     puckBearingEnabled = true
                 }
-                mapViewportState.transitionToFollowPuckState()
+                if(!mainViewModel.hasCenteredBefore) { //if this is the first load
+                    mapViewportState.transitionToFollowPuckState() //focus on user
+                    mainViewModel.hasCenteredBefore = true //set to true
+                }
             }
         }
 
-        Log.v("INFO", "before entities forEach in map")
         //regardless of location-permissions, plot buses on map using ViewAnnotation
         entities?.forEach { entity ->
             val lon = entity.vehicle.position.longitude
@@ -92,7 +94,6 @@ fun MapUI(mainViewModel: MainViewModel) {
         }
     }
 }
-
 
 //view annotation component for our buses
 @Composable
