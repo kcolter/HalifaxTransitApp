@@ -27,8 +27,6 @@ fun AlertsUI(mainViewModel: MainViewModel) {
     val gtfsFeed by mainViewModel.gtfs_alerts.collectAsState()
     val alerts = gtfsFeed?.entityList
 
-    Spacer(modifier = Modifier.height(30.dp))
-
     if (alerts != null) {
         LazyColumn(
             modifier = Modifier
