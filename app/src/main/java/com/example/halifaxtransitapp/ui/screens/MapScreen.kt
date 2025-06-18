@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -39,7 +38,7 @@ import com.mapbox.maps.viewannotation.viewAnnotationOptions
 @Composable
 fun MapUI(mainViewModel: MainViewModel) {
 
-    val gtfsFeed by mainViewModel.gtfs.collectAsState()
+    val gtfsFeed by mainViewModel.gtfs_bus.collectAsState()
     val entities = gtfsFeed?.entityList
 
     val mapViewportState = mainViewModel.mapViewportState

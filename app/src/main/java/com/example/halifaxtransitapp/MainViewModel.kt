@@ -24,8 +24,11 @@ class MainViewModel : ViewModel() {
     // Store the map viewport state in the ViewModel so does not reset when screen is reloaded
     val mapViewportState = MapViewportState()
 
-    private val _gtfs = MutableStateFlow<GtfsRealtime.FeedMessage?>(null)
-    val gtfs = _gtfs.asStateFlow()
+    private val _gtfs_bus = MutableStateFlow<GtfsRealtime.FeedMessage?>(null)
+    val gtfs_bus = _gtfs_bus.asStateFlow()
+
+    private val _gtfs_alerts = MutableStateFlow<GtfsRealtime.FeedMessage?>(null)
+    val gtfs_alerts = _gtfs_alerts.asStateFlow()
 
     // Get the real-time bus positions from Halifax Transit.
     fun loadBusPositions() {
@@ -47,14 +50,21 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val url = URL("https://gtfs.halifax.ca/realtime/Vehicle/VehiclePositions.pb")
+                val alertsUrl = URL("https://gtfs.halifax.ca/realtime/Alert/Alerts.pb")
+                val busPosUrl = URL("https://gtfs.halifax.ca/realtime/Vehicle/VehiclePositions.pb")
                 // Run code (which is blocking) on a background thread optimized for I/O,
                 // and suspend the coroutine until it's done.
-                val feed = withContext(Dispatchers.IO) {
-                    GtfsRealtime.FeedMessage.parseFrom(url.openStream())
+
+                val bus_feed = withContext(Dispatchers.IO) {
+                    GtfsRealtime.FeedMessage.parseFrom(busPosUrl.openStream())
                 }
-                Log.v("INFO", feed.toString())
-                _gtfs.value = feed
+                _gtfs_bus.value = bus_feed
+
+                val alerts_feed = withContext(Dispatchers.IO) {
+                    GtfsRealtime.FeedMessage.parseFrom(alertsUrl.openStream())
+                }
+                _gtfs_alerts.value = alerts_feed
+
             } catch (e: Exception) {
                 Log.v("INFO", e.toString() )
             }
