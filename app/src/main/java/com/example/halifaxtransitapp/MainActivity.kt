@@ -1,7 +1,5 @@
 package com.example.halifaxtransitapp
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -18,15 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.compose.NavHost
@@ -35,12 +30,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.halifaxtransitapp.ui.screens.AlertsUI
 import com.example.halifaxtransitapp.ui.screens.MapUI
 import com.example.halifaxtransitapp.ui.theme.HalifaxTransitAppTheme
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.CancellationTokenSource
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 
@@ -163,20 +152,13 @@ fun DisplayUI(mainViewModel: MainViewModel){
 }
 
 
+//no logic requirements for the permissionsListener, just needed when constructing permissionsManager
 //researched from https://docs.mapbox.com/android/maps/guides/user-location/permissions/
 var permissionsListener: PermissionsListener = object : PermissionsListener {
     override fun onExplanationNeeded(permissionsToExplain: List<String>) {
 
     }
-
     override fun onPermissionResult(granted: Boolean) {
-        if (granted) {
-            // Permission sensitive logic called here, such as activating the Maps SDK's LocationComponent to show the device's location
 
-        } else {
-
-            // User denied the permission
-
-        }
     }
 }
